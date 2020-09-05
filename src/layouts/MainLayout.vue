@@ -34,11 +34,16 @@ export default {
   },
   created () {
     const user = this.$q.localStorage.getItem('user')
-    if (user.name && user.password) {
-      this.$store.dispatch('user/setUser', user)
-    } else {
-      this.$router.push('/login')
-    }
+    this.$store.dispatch('user/loginUser', { name: user.name, password: user.password })
+      .then(res => {
+        if (res.user) {
+          this.$q.localStorage.set('user', res.user)
+          this.$router.push('/')
+        } else {
+          this.$q.localStorage.set('user', undefined)
+          this.$router.push('/login')
+        }
+      })
   },
   methods: {
     logout () {

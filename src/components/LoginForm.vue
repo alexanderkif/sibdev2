@@ -78,12 +78,12 @@ export default {
       } else {
         this.$store.dispatch('user/loginUser', { name: this.name, password: this.password })
           .then(res => {
-            console.log('res', res)
             if (res.user) {
               this.$q.localStorage.set('user', res.user)
               this.$router.push('/')
             } else {
-              // user not found
+              this.$q.localStorage.set('user', undefined)
+              this.$router.push('/login')
             }
           })
       }
