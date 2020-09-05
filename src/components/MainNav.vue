@@ -1,7 +1,7 @@
 <template>
   <q-tabs
     dense
-    class="text-grey"
+    class="text-grey nav"
     active-color="primary"
     indicator-color="primary"
     narrow-indicator
@@ -11,6 +11,8 @@
       :key="tab.index"
       :to="tab.to"
       :label="tab.label"
+      class="nav__tab"
+      no-caps
     />
   </q-tabs>
 </template>
@@ -34,11 +36,16 @@ export default {
     return {
       tabs: tabs
     }
-  },
-  computed: {
-    getUser () {
-      return this.$store.getters['user/getUser']
-    }
   }
 }
 </script>
+
+<style lang="scss">
+.q-tab__label {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 28px;
+}
+</style>

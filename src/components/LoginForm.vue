@@ -1,50 +1,57 @@
 <template>
-  <div class="q-pa-md">
-    <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="q-gutter-md">
-      <q-input
-        ref="name"
-        v-model="name"
-        filled
-        hint="Minimum 3 characters"
-        label="Username *"
-        counter
-        :rules="[
-            val => !!val || '* Required',
-            val => /^[а-яёa-z0-9]*$/i.test(val) || 'Letters and numbers only',
-            val => val.length >= 3 || 'Please use minimum 3 characters'
-          ]"
-        lazy-rules
-      />
+  <div class="login-form row justify-center">
+    <div class="row full-width justify-center login-form__logo">
+      <img src="~assets/form-logo.svg">
+    </div>
+    <div class="row full-width justify-center login-form__title">
+      Вход
+    </div>
+    <div class="row full-width login-form__form">
+      <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="q-gutter-md full-width">
+        <q-input
+          ref="name"
+          v-model="name"
+          hint="Minimum 3 characters"
+          label="Username *"
+          counter
+          outlined
+          :rules="[
+              val => !!val || '* Required',
+              val => /^[а-яёa-z0-9]*$/i.test(val) || 'Letters and numbers only',
+              val => val.length >= 3 || 'Please use minimum 3 characters'
+            ]"
+          lazy-rules
+        />
 
-      <q-input
-        ref="password"
-        v-model="password"
-        filled :type="isPwd ? 'password' : 'text'"
-        hint="Minimum 8 characters"
-        label="Password *"
-        counter
-        :rules="[
-            val => !!val || '* Required',
-            val => /^[а-яёa-z0-9!@#$%^&*]*$/i.test(val) || 'Letters, numbers, symbols only',
-            val => val.length >= 8 || 'Please use minimum 8 characters'
-          ]"
-        lazy-rules
-      >
-        <template v-slot:append>
-          <q-icon
-            :name="isPwd ? 'visibility_off' : 'visibility'"
-            class="cursor-pointer"
-            @click="isPwd = !isPwd"
-          />
-        </template>
-      </q-input>
+        <q-input
+          ref="password"
+          v-model="password"
+          :type="isPwd ? 'password' : 'text'"
+          hint="Minimum 8 characters"
+          label="Password *"
+          counter
+          outlined
+          :rules="[
+              val => !!val || '* Required',
+              val => /^[а-яёa-z0-9!@#$%^&*]*$/i.test(val) || 'Letters, numbers, symbols only',
+              val => val.length >= 8 || 'Please use minimum 8 characters'
+            ]"
+          lazy-rules
+        >
+          <template v-slot:append>
+            <q-icon
+              :name="isPwd ? 'visibility_off' : 'visibility'"
+              class="cursor-pointer"
+              @click="isPwd = !isPwd"
+            />
+          </template>
+        </q-input>
 
-      <div class="text-right">
-        <q-btn v-if="getUser" label="logout" @click.stop="logout" color="primary" flat />
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-xs" />
-        <q-btn label="Submit" type="submit" color="primary" class="q-ml-xs" />
-      </div>
-    </form>
+        <div class="text-center">
+          <q-btn label="Войти" type="submit" color="primary" class="q-ml-xs login-form__btn" no-caps />
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -70,19 +77,16 @@ export default {
         this.formHasError = true
       } else {
         this.$store.dispatch('user/loginUser', { name: this.name, password: this.password })
-          .then(() => this.$router.push('/'))
+          .then(res => {
+            console.log('res', res)
+            if (res.user) {
+              this.$q.localStorage.set('user', res.user)
+              this.$router.push('/')
+            } else {
+              // user not found
+            }
+          })
       }
-    },
-    logout () {
-      this.name = ''
-      this.password = ''
-      this.$store.dispatch('user/exitUser')
-    },
-    onReset () {
-      this.name = null
-      this.password = null
-      this.$refs.name.resetValidation()
-      this.$refs.password.resetValidation()
     }
   },
   computed: {
@@ -92,3 +96,39 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.login-form {
+  width: 510px;
+  height: 520px;
+  background-color: #ffffff;
+  padding: 40px 88px;
+
+  &__logo {
+    height: 88px;
+    margin-bottom: 32px;
+  }
+
+  &__title {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 28px;
+    color: #000000;
+    height: 28px;
+    margin-bottom: 42px;
+  }
+
+  &__btn {
+    width: 176px;
+    height: 52px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+    color: #FFFFFF;
+  }
+}
+</style>
