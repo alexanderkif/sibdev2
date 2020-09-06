@@ -33,22 +33,28 @@ export default {
     MainNav
   },
   created () {
-    const user = this.$q.localStorage.getItem('user')
-    this.$store.dispatch('user/loginUser', { name: user.name, password: user.password })
-      .then(res => {
-        if (res.user) {
-          this.$q.localStorage.set('user', res.user)
-          this.$router.push('/')
-        } else {
-          this.$q.localStorage.set('user', undefined)
-          this.$router.push('/login')
-        }
-      })
+    const user = this.$q.localStorage.getItem('sibdev2_user')
+    if (user && user.name && user.password) {
+      // check user
+      this.$store.dispatch('user/loginUser', { name: user.name, password: user.password })
+        .then(res => {
+          if (res.user) {
+            this.$q.localStorage.set('sibdev2_user', res.user)
+            if (this.$route.path !== '/') this.$router.push('/')
+          } else {
+            // user not found
+            this.$q.localStorage.remove('sibdev2_user')
+            this.$router.push('/login')
+          }
+        })
+    } else {
+      this.$router.push('/login')
+    }
   },
   methods: {
     logout () {
       this.$store.dispatch('user/exitUser')
-      this.$q.localStorage.set('user', undefined)
+      this.$q.localStorage.remove('sibdev2_user')
       this.$router.push('/login')
     }
   },

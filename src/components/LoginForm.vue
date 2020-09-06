@@ -79,11 +79,10 @@ export default {
         this.$store.dispatch('user/loginUser', { name: this.name, password: this.password })
           .then(res => {
             if (res.user) {
-              this.$q.localStorage.set('user', res.user)
+              this.$q.localStorage.set('sibdev2_user', res.user)
               this.$router.push('/')
             } else {
-              this.$q.localStorage.set('user', undefined)
-              this.$router.push('/login')
+              // user not found
             }
           })
       }
