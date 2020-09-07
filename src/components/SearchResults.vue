@@ -42,7 +42,7 @@
     <q-page v-if="showVideo" class="fullscreen bg-transition flex flex-center" >
       <div class="fullscreen bg-black" style="opacity:0.7;"></div>
       <iframe id="ytplayer" type="text/html" width="640" height="360"
-        src="http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1"
+        src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1"
         frameborder="0" style="z-index: 10000;" allow="autoplay, fullscreen" />
       <q-page-sticky position="top-right" :offset="[18, 18]" style="z-index: 10000;">
         <q-btn fab icon="close" color="primary" @click.stop="showVideo=false" />

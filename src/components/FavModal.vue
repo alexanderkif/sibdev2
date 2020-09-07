@@ -14,6 +14,7 @@
     </q-card-section>
     <q-card-section class="row items-center q-pt-lg">
       <q-input
+        ref="name"
         v-model="name"
         label="Укажите название *"
         outlined
@@ -47,7 +48,7 @@
 
     <q-card-actions align="center" class="row q-px-md" >
       <q-btn class="col" outline label="Не сохранять" color="primary" v-close-popup />
-      <q-btn class="col" label="Сохранить" color="primary" @click="save" v-close-popup />
+      <q-btn class="col" label="Сохранить" color="primary" @click="save" />
     </q-card-actions>
   </q-card>
 </template>
@@ -70,6 +71,10 @@ export default {
   },
   methods: {
     save () {
+      this.$refs.name.validate()
+      if (this.$refs.name.hasError) {
+        return false
+      }
       const item = {}
       item.name = this.name
       item.q = this.lastQuery
@@ -99,6 +104,7 @@ export default {
         })
       }
       this.$q.localStorage.set(`sibdev2_fav_${this.getUser.name}`, fav)
+      this.$emit('close-fav-modal')
     }
   },
   computed: {

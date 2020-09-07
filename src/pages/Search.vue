@@ -26,7 +26,7 @@
     </div>
     <SearchResults :lastQuery="lastQuery" />
     <q-dialog v-model="openFavModal" class="fullscreen flex flex-center search__fav-modal" >
-      <FavModal :lastQuery="lastQuery" />
+      <FavModal :lastQuery="lastQuery" @close-fav-modal="openFavModal=false" />
     </q-dialog>
   </q-page>
 </template>
