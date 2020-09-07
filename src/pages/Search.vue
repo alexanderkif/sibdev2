@@ -1,8 +1,8 @@
 <template>
-  <q-page class="flex search" :class="results.length ? '' : 'flex-center'">
-    <div class="search__control" :class="results.length ? 'search__control_found' : ''">
+  <q-page class="flex search" :class="getMovies&&getMovies.length ? '' : 'flex-center'">
+    <div class="search__control" :class="getMovies&&getMovies.length ? 'search__control_found' : ''">
       <div class="row search__label"
-        :class="results.length ? 'justify-start search__label_left' : 'justify-center'">
+        :class="getMovies&&getMovies.length ? 'justify-start search__label_left' : 'justify-center'">
         Поиск видео
       </div>
       <form @submit.prevent.stop="onSubmit"
@@ -12,64 +12,72 @@
           v-model="q"
           label="Что хотите посмотреть?"
           outlined
-          class="search__input"
-          :class="results.length ? 'search__input_found' : ''"
-        />
+          class="search__input relative-position"
+          :class="getMovies&&getMovies.length ? 'search__input_found' : ''"
+        >
+          <q-btn v-if="getMovies&&getMovies.length" flat round color="primary"
+            class="search__heart-btn absolute-right" @click="addFavorite">
+            <img v-if="getFavoritesQuery.includes(q)" src="~assets/heart-filled.svg" />
+            <img v-else src="~assets/heart.svg" />
+          </q-btn>
+        </q-input>
         <q-btn label="Найти" type="submit" color="primary" size="20px" class="q-ml-none search__btn" no-caps />
       </form>
     </div>
-    <div class="search__filter row full-width" v-show="results.length">
-      Видео по запросу "<b>{{ lastQuery }}</b>"<span class="search__total">{{ total >= 1000000 ? '> 1 млн' : total }}</span>
-    </div>
-    <div class="search__results flex justify-around">
-      <q-card
-        class="search__card"
-        v-for="res in results"
-        :key="res.index"
-        flat
-      >
-        <img class="search__img" :src="res.snippet.thumbnails.medium.url">
-
-        <div class="search__card-title row">
-          {{ res.snippet.title.length > 60 ? res.snippet.title.slice(0, 60)+'...' : res.snippet.title }}
-        </div>
-
-        <div class="search__card-descr">
-          <div>{{ res.snippet.channelTitle }}</div>
-          <div>{{ res.viewCount }}</div>
-        </div>
-      </q-card>
-    </div>
+    <SearchResults :lastQuery="lastQuery" />
+    <q-dialog v-model="openFavModal" class="fullscreen flex flex-center search__fav-modal" >
+      <FavModal :lastQuery="lastQuery" />
+    </q-dialog>
   </q-page>
 </template>
 
 <script>
+import SearchResults from '../components/SearchResults'
+import FavModal from '../components/FavModal'
+
 export default {
   name: 'PageIndex',
+  components: {
+    SearchResults,
+    FavModal
+  },
   data () {
     return {
-      q: '',
+      q: this.$route.query.q || '',
       lastQuery: '',
       maxResults: 12,
-      results: [],
-      total: 0
+      showVideo: false,
+      openFavModal: false
     }
   },
   methods: {
     onSubmit () {
       this.lastQuery = this.q
       this.$store.dispatch('movie/getMovies', { maxResults: this.maxResults, q: this.q })
-        .then(async res => {
-          this.results = await Promise.all(await res.items.map(async el => {
-            el.viewCount = await this.getViewCount(el.id.videoId || el.id.playlistId || el.id.channelId)
-            return el
-          }))
-          this.total = res.pageInfo.totalResults
-        })
     },
-    async getViewCount (videoId) {
-      const viewCount = await this.$store.dispatch('movie/getViewCount', videoId)
-      return viewCount
+    addFavorite () {
+      if (this.lastQuery === '') return false
+      if (this.getFavoritesQuery.includes(this.lastQuery)) {
+        alert('Запрос уже сохранен.')
+        return false
+      }
+      this.openFavModal = true
+    }
+  },
+  computed: {
+    getMovies () {
+      return this.$store.getters['movie/getMovies']
+    },
+    getUser () {
+      return this.$store.getters['user/getUser']
+    },
+    getFavoritesQuery () {
+      if (this.getUser && this.getUser.name) {
+        const favs = this.$q.localStorage.getItem(`sibdev2_fav_${this.getUser.name}`)
+        if (favs) {
+          return favs.map(el => el.q)
+        } else return []
+      } else return []
     }
   }
 }
@@ -115,51 +123,13 @@ export default {
     width: 150px;
   }
 
-  &__img {
-    width: 245px;
-    height: 138px;
-    margin-bottom: 8px;
+  &__heart-btn {
+    height: 42px;
+    margin: auto 0;
   }
 
-  &__filter {
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 24px;
-    margin-bottom: 20px;
-  }
-
-  &__total {
-    color: rgba(23, 23, 25, 0.3);
-    margin-left: 15px;
-  }
-
-  &__card {
-    width: 245px;
-    height: 226px;
-    background-color: transparent;
-    margin-bottom: 20px;
-  }
-
-  &__card-title {
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 16px;
-    color: #000000;
-    height: 32px;
-    margin-bottom: 8px;
-  }
-
-  &__card-descr {
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 16px;
-    color: rgba(23, 23, 25, 0.3);
+  &__fav-modal {
+    background-color: #75C7FF;
   }
 }
 </style>
