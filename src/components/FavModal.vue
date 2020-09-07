@@ -36,12 +36,13 @@
         <q-slider v-model="count" :min="0" :max="50"/>
       </div>
       <q-input
+        ref="count"
         v-model="count"
         outlined
         class="fav-modal__count col-4 q-pl-lg text-center"
         :rules="[
           val => val > 0 || 'Должен быть больше 0',
-          val => val < 50 || 'Должен быть не больше 50'
+          val => val < 51 || 'Должен быть не больше 50'
         ]"
       />
     </q-card-section>
@@ -72,7 +73,8 @@ export default {
   methods: {
     save () {
       this.$refs.name.validate()
-      if (this.$refs.name.hasError) {
+      this.$refs.count.validate()
+      if (this.$refs.name.hasError || this.$refs.count.hasError) {
         return false
       }
       const item = {}
