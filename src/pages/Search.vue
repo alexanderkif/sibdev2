@@ -43,11 +43,17 @@ export default {
   },
   data () {
     return {
-      q: this.$route.query.q || '',
+      q: '',
       lastQuery: '',
       maxResults: 12,
       showVideo: false,
       openFavModal: false
+    }
+  },
+  mounted () {
+    if (this.$route.query.q) {
+      this.q = this.$route.query.q
+      this.onSubmit()
     }
   },
   methods: {
