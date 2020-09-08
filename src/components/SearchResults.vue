@@ -23,7 +23,7 @@
         v-for="res in getMovies"
         :key="res.index"
         flat
-        @click="showVideo=true"
+        @click="runVideoDialog(res.id.videoId)"
       >
         <img class="search-results__img" :src="res.snippet.thumbnails.medium.url"
           :class="list ? 'search-results__img_list' : ''">
@@ -42,7 +42,7 @@
     <q-page v-if="showVideo" class="fullscreen bg-transition flex flex-center" >
       <div class="fullscreen bg-black" style="opacity:0.7;"></div>
       <iframe id="ytplayer" type="text/html" width="640" height="360"
-        src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1"
+        :src="`https://www.youtube.com/embed/${video}?autoplay=1`"
         frameborder="0" style="z-index: 10000;" allow="autoplay, fullscreen" />
       <q-page-sticky position="top-right" :offset="[18, 18]" style="z-index: 10000;">
         <q-btn fab icon="close" color="primary" @click.stop="showVideo=false" />
@@ -60,7 +60,14 @@ export default {
   data () {
     return {
       showVideo: false,
+      video: '',
       list: false
+    }
+  },
+  methods: {
+    runVideoDialog (videoId) {
+      this.video = videoId
+      this.showVideo = true
     }
   },
   computed: {
