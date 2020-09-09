@@ -29,7 +29,7 @@
           :class="list ? 'search-results__img_list' : ''">
         <div class="seatch-result__text" :class="list ? 'search-results__text_list' : ''">
           <div class="search-results__card-title row" :class="list ? 'search-results__card-title_list' : ''">
-            {{ res.snippet.title.length > 60 ? res.snippet.title.slice(0, 60)+'...' : res.snippet.title }}
+            {{ res.snippet.title.length > 50 && !list ? res.snippet.title.slice(0, 50)+'...' : res.snippet.title }}
           </div>
 
           <div class="search-results__card-descr" :class="list ? 'search-results__card-descr_list' : ''">
@@ -129,6 +129,7 @@ export default {
       height: 88px;
       display: flex;
       flex-wrap: nowrap;
+      width: 100%;
     }
   }
 
@@ -144,7 +145,8 @@ export default {
 
     &_list {
       max-width: 510px;
-      height: 40px;
+      max-height: 40px;
+      overflow: hidden;
     }
   }
 
