@@ -41,6 +41,7 @@ export default {
 .fav {
   max-width: 1040px;
   margin: 40px auto;
+  padding: 0 10px;
 
   &__label {
     font-family: Roboto;

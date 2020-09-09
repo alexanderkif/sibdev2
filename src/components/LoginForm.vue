@@ -98,10 +98,14 @@ export default {
 
 <style lang="scss" scoped>
 .login-form {
-  width: 510px;
+  max-width: 510px;
   height: 520px;
   background-color: #ffffff;
   padding: 40px 88px;
+
+  @media (max-width: 510px) {
+    padding: 40px 10px;
+  }
 
   &__logo {
     height: 88px;

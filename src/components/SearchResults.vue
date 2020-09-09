@@ -1,7 +1,7 @@
 <template>
   <div class="search-results">
     <div class="search-results__filter row justify-between full-width" v-if="getMovies&&getMovies.length">
-      <div>
+      <div class="flex items-center">
         Видео по запросу "<b>{{ lastQuery }}</b>"
         <span class="search-results__total">
           {{ getTotal >= 1000000 ? '> 1 млн' : getTotal }}
@@ -83,6 +83,8 @@ export default {
 
 <style lang="scss" scoped>
 .search-results {
+  padding: 0 10px;
+
   &__img {
     width: 245px;
     height: 138px;
@@ -117,13 +119,13 @@ export default {
   }
 
   &__card {
-    width: 245px;
+    max-width: 245px;
     height: 226px;
     background-color: transparent;
     margin-bottom: 20px;
 
     &_list {
-      width: 690px;
+      max-width: 690px;
       height: 88px;
       display: flex;
       flex-wrap: nowrap;
@@ -141,7 +143,7 @@ export default {
     margin-bottom: 8px;
 
     &_list {
-      width: 510px;
+      max-width: 510px;
       height: 40px;
     }
   }
@@ -155,7 +157,7 @@ export default {
     color: rgba(23, 23, 25, 0.3);
 
     &_list {
-      width: 510px;
+      max-width: 510px;
       height: 40px;
     }
   }

@@ -92,15 +92,23 @@ export default {
 <style lang="scss" scoped>
 .search {
   max-width: 1040px;
+  min-width: 330px;
   margin: 0 auto;
 
   &__control {
-    width: 686px;
-    padding: 40px 0;
+    max-width: 686px;
+    padding: 40px 10px;
+    width: 100%;
 
     &_found {
-      width: 1040px;
+      max-width: 1040px;
     }
+  }
+
+  &__form {
+    display: flex;
+    flex-flow: nowrap;
+    width: 100%;
   }
 
   &__label {
@@ -118,10 +126,11 @@ export default {
   }
 
   &__input {
-    width: 536px;
+    max-width: 536px;
+    width: 100%;
 
     &_found {
-      width: 890px;
+      max-width: 890px;
     }
   }
 

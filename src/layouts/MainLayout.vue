@@ -2,7 +2,7 @@
   <q-layout view="hHh lpR fFf">
 
     <q-header v-show="getUser&&getUser.name" class="bg-white text-primary header" height-hint="98">
-      <q-toolbar style="width: 1040px; margin: 0 auto;">
+      <q-toolbar style="max-width: 1040px; min-width: 330px; margin: 0 auto;">
         <q-avatar>
           <img src="~assets/panel-logo.svg">
         </q-avatar>
