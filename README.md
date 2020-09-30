@@ -2,6 +2,10 @@
 
 SibDev test task
 
+### Link to Figma
+
+https://tinyurl.com/yydwdrc6
+
 ## Install the dependencies
 ```bash
 npm install
