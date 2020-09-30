@@ -6,6 +6,8 @@ SibDev test task
 
 https://alexanderkif.github.io/sibdev2/
 
+#### Demo access: user1 password1
+
 ### Link to Figma
 
 https://tinyurl.com/yydwdrc6
