@@ -2,6 +2,10 @@
 
 SibDev test task
 
+### Deploy
+
+https://alexanderkif.github.io/sibdev2/
+
 ### Link to Figma
 
 https://tinyurl.com/yydwdrc6
